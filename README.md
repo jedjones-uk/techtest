@@ -1,62 +1,48 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+# API Routes
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+The web and api routes of this code are both powered by the same code. They are implemented with action classes and can be found in `app/Actions`. I extended the model given to use a separate product category table because it's the better design and I like to be able to update such things. All api routes are the same as the web routes, but prefixed with `api`
 
-## About Laravel
+### This documentation assumes the reader is familiar with Laravel 8.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+The following routes are available.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+#### products
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+| Method | Route | Name | Action |
+| ------ | ------ | ------ | ------ |
+| GET | /product | product.index |list all products |
+| GET | /product/create | product.create | Provide all options needed to create a product (the product category list) |
+| POST | /product | product.store | Create a new product |
+| GET | /product/{product}/edit | product.edit | Shows same as `product.create` + the product you want to edit |
+| PUT | /product/{product} | product.update | Update Product |
+| DELETE | /product/{product} | product.destroy | Soft Delete the product |
+| GET | /product/{product}/restore | product.restore | Restore the product from soft delete |
+| GET | /product/{product}/delete | product.delete-permanently | Delete the product from the database |
+| POST | /product/empty-category | product.bulk-delete | Soft delete all products in a category |
+| POST | /product/update-category | product.bulk-update | Bulk update all product in a category |
 
-## Learning Laravel
+#### Product Category
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+| Method | Route | Name | Action |
+| ------ | ------ | ------ | ------ |
+| GET | /product-category | productCategory.index | list all categories |
+| GET | /product-category/create | productCategory.create | Empty for json, but would be used as above to deliver dependencies |
+| POST | /product-category | productCategory.store | Create a new category |
+| GET | /product-category/{productCategory}/edit | productCategory.edit | Shows same as `productCategory.create` + the category you want to edit |
+| PUT | /product-category/{productCategory} | productCategory.update | Update category |
+| DELETE | /product-category/{productCategory} | productCategory.destroy | Soft Delete the category |
+| GET | /product-category/{productCategory}/restore | productCategory.restore | Restore the category from soft delete |
+| GET | /product-category/{productCategory}/delete | productCategory.delete-permanently | Delete the  category from the database |
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+#### Notes
 
-## Laravel Sponsors
+Both Index routes accept additional query parameters:
+- `archived` : When this is given the value `1`, then the index will be of all soft deleted results.
+- `product_category` : This will filter the results based on the product category slug.
+- These can be combined
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+The translation is defaulted to English, to get a alternative translate the parameter `locale` should be set either as a query parameter, or a post value. This will be detected by a Middleware and used to set the working language. To add a language to a product, you would use the update route and include the `locale` to indicate which you want to set.
 
-### Premium Partners
+There is seeders included to create test data, and some basic tests implemented.
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+There default account is `admin@admin.test`/`password`
