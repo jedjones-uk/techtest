@@ -14,5 +14,27 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('dashboard');
+});
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth'])->name('dashboard');
+
+require __DIR__ . '/auth.php';
+
+/*
+ * Product Management
+ */
+Route::group(['as' => 'product.', 'middleware' => 'auth'], function () {
+    //Standard Crud Actions
+    require __DIR__ . '/models/products.php';
+});
+
+/*
+ * Product Category Management
+ */
+Route::group(['as' => 'productCategory.', 'middleware' => 'auth'], function () {
+    //Standard Crud Actions
+    require __DIR__ . '/models/productCategory.php';
 });

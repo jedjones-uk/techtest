@@ -17,3 +17,19 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+/*
+ * Product Management
+ */
+Route::group(['as' => 'product.'], function () {
+    //Standard Crud Actions
+    require __DIR__ . '/models/products.php';
+});
+
+/*
+ * Product Category Management
+ */
+Route::group(['as' => 'productCategory.'], function () {
+    //Standard Crud Actions
+    require __DIR__ . '/models/productCategory.php';
+});
